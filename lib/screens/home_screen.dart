@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:chatwave/api/apis.dart';
 import 'package:chatwave/model/chat_user.dart';
+import 'package:chatwave/screens/profile_screen.dart';
 import 'package:chatwave/screens/widgets/chat_user_card.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,20 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         leading: const Icon(Icons.home),
         title: const Text('Chat Wave'),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.search))],
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(
+                        user: list[0],
+                      ),
+                    ));
+              },
+              icon: const Icon(Icons.more))
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -46,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }
               return ListView.builder(
                   itemCount: list.length,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) =>
                       ChatUserCard(user: list[index]));
           }

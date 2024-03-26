@@ -4,9 +4,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
+// class ChatUserCard extends StatefulWidget {
+//   final ChatUser user;
+//   const ChatUserCard({super.key, required this.user});
+
+//   @override
+//   State<ChatUserCard> createState() => _ChatUserCardState();
+// }
+
+// class _ChatUserCardState extends State<ChatUserCard> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+//       elevation: 0.5,
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(5),
+//       ),
+//       child: InkWell(
+//         child: ListTile(
+//           title: Text(widget.user.name),
+//           leading: CachedNetworkImage(imageUrl: widget.user.image),
+//           subtitle: Text(
+//             widget.user.about,
+//             maxLines: 1,
+//           ),
+//           trailing: Text('12 pm'),
+//         ),
+//       ),
+//     );
+//   }
+// }
 class ChatUserCard extends StatefulWidget {
-  final ChatUser user;
-  const ChatUserCard({super.key, required this.user});
+  final ChatUser? user;
+  const ChatUserCard({Key? key, required this.user});
 
   @override
   State<ChatUserCard> createState() => _ChatUserCardState();
@@ -23,10 +54,12 @@ class _ChatUserCardState extends State<ChatUserCard> {
       ),
       child: InkWell(
         child: ListTile(
-          title: Text(widget.user.name),
-          leading: CachedNetworkImage(imageUrl: widget.user.image),
+          title:
+              Text(widget.user?.name ?? 'Unknown User'), // Handling null value
+          leading: CachedNetworkImage(
+              imageUrl: widget.user?.image ?? ''), // Handling null value
           subtitle: Text(
-            widget.user.about,
+            widget.user?.about ?? '',
             maxLines: 1,
           ),
           trailing: Text('12 pm'),
