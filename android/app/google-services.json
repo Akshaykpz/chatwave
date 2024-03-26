@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "309379094838",
+    "project_id": "chatwave-84602",
+    "storage_bucket": "chatwave-84602.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:309379094838:android:76a0e45bcd461ed5e0fb97",
+        "android_client_info": {
+          "package_name": "com.example.chatwave"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "309379094838-qb8qlh2m7rfe34t75c06i7lggrrasp68.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chatwave",
+            "certificate_hash": "97bd0da2c4a0bde37448250c6b52c52ae2bbd49b"
+          }
+        },
+        {
+          "client_id": "309379094838-q041u57snqpmo7l0p1uknjjk7al1ndum.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRkD5z3Hq2dqoyDZGoX0bfFz50H71rC88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "309379094838-q041u57snqpmo7l0p1uknjjk7al1ndum.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "309379094838-jsv3qaps2gpviggee123on71asgrcih0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chatwave"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
