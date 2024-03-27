@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatwave/api/apis.dart';
 import 'package:chatwave/model/chat_user.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -34,7 +35,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           key: formkey,
           child: Column(
             children: [
-              ClipRect(child: CachedNetworkImage(imageUrl: widget.user.image)),
+              Stack(children: [
+                ClipRect(
+                    child: CachedNetworkImage(imageUrl: widget.user.image)),
+                MaterialButton(
+                  onPressed: () {},
+                )
+              ]),
               Text(widget.user.email),
               TextFormField(
                 onSaved: (newValue) => Api.me.name = newValue ?? "",
@@ -76,6 +83,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showSnakbar() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView(
+          children: [
+            Text(
+              'take profile picture',
+              textAlign: TextAlign.center,
+            ),
+            Row(
+              children: [
+                ElevatedButton(onPressed: () {}, child: Text("data")),
+                ElevatedButton(onPressed: () {}, child: Text(""))
+              ],
+            )
+          ],
+        );
+      },
     );
   }
 }
