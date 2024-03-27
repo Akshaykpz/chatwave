@@ -28,4 +28,13 @@ class Api {
         .doc(user.uid)
         .set(chatuser.toJson()));
   }
+
+  Future<bool> signOutFromGoogle() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
 }

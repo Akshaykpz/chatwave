@@ -1,4 +1,4 @@
-import 'package:chatwave/auth/splash_screen.dart';
+import 'package:chatwave/screens/splash_screen.dart';
 import 'package:chatwave/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
