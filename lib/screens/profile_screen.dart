@@ -38,9 +38,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Stack(children: [
                 ClipRect(
                     child: CachedNetworkImage(imageUrl: widget.user.image)),
-                MaterialButton(
-                  onPressed: () {},
-                )
+                Positioned(
+                    bottom: 10,
+                    left: 45,
+                    top: 0,
+                    child: MaterialButton(
+                      onPressed: () {
+                        _showSnakbar();
+                      },
+                      child: Icon(Icons.edit, color: Colors.blue, size: 28),
+                    ))
               ]),
               Text(widget.user.email),
               TextFormField(
@@ -98,7 +105,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Row(
               children: [
-                ElevatedButton(onPressed: () {}, child: Text("data")),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: CircleBorder(),
+                        fixedSize: Size(10, 10)),
+                    onPressed: () {},
+                    child: Text("data")),
                 ElevatedButton(onPressed: () {}, child: Text(""))
               ],
             )
