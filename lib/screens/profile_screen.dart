@@ -1,11 +1,13 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatwave/api/apis.dart';
 import 'package:chatwave/model/chat_user.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
   final ChatUser user;
@@ -16,6 +18,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 final formkey = GlobalKey<FormState>();
+String? _image;
 
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
@@ -36,8 +39,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             children: [
               Stack(children: [
-                ClipRect(
-                    child: CachedNetworkImage(imageUrl: widget.user.image)),
+                _image != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(17),
+                        child: Image.file(
+                          File(
+                            _image!,
+                          ),
+                          width: 100,
+                          height: 100,
+                        ),
+                      )
+                    : ClipRect(
+                        child: CachedNetworkImage(
+                        imageUrl: widget.user.image,
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.fill,
+                      )),
                 Positioned(
                     bottom: 10,
                     left: 45,
@@ -46,8 +65,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onPressed: () {
                         _showSnakbar();
                       },
-                      child: Icon(Icons.edit, color: Colors.blue, size: 28),
-                    ))
+                      child:
+                          const Icon(Icons.edit, color: Colors.blue, size: 28),
+                    )),
               ]),
               Text(widget.user.email),
               TextFormField(
@@ -77,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Api.updateUserinfo().then(
                         (value) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                            const SnackBar(
                               content: Text('Contents added successfully'),
                             ),
                           );
@@ -85,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     }
                   },
-                  child: Text("Update"))
+                  child: const Text("Update"))
             ],
           ),
         ),
@@ -96,15 +116,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showSnakbar() {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(20), topLeft: Radius.circular(20))),
       builder: (context) {
         return ListView(
           shrinkWrap: true,
-          padding: EdgeInsets.only(top: 25, bottom: 25),
+          padding: const EdgeInsets.only(top: 25, bottom: 25),
           children: [
-            Text(
+            const Text(
               'take profile picture',
               textAlign: TextAlign.center,
             ),
@@ -114,17 +134,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        shape: CircleBorder(),
-                        fixedSize: Size(100, 100)),
-                    onPressed: () {},
+                        shape: const CircleBorder(),
+                        fixedSize: const Size(100, 100)),
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+// Pick an image.
+                      final XFile? image =
+                          await picker.pickImage(source: ImageSource.gallery);
+                      if (image != null) {
+                        log('image :${image.path}, mimtype${image.mimeType},');
+                        setState(() {
+                          _image = image.path;
+                        });
+                        Navigator.pop(context);
+                      }
+                    },
                     child: Image.asset(
                         'assets/64d1120804fa6_com.sec.android.gallery3d.png')),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        shape: CircleBorder(),
-                        fixedSize: Size(100, 100)),
-                    onPressed: () {},
+                        shape: const CircleBorder(),
+                        fixedSize: const Size(100, 100)),
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+// Pick an image.
+                      final XFile? image =
+                          await picker.pickImage(source: ImageSource.camera);
+                      if (image != null) {
+                        log('image :${image.path}, mimtype${image.mimeType},');
+                        setState(() {
+                          _image = image.path;
+                        });
+                        Navigator.pop(context);
+                      }
+                    },
                     child: Image.asset(
                         'assets/80-801558_transparent-gallery-icon-png-flat-camera-icon-png.png'))
               ],

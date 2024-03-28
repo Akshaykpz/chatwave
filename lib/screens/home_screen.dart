@@ -18,7 +18,6 @@ bool isSeraching = false;
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Api.userInfo();
   }
@@ -62,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
           body: StreamBuilder(
             stream: Api.getallUsers(),
@@ -70,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                 case ConnectionState.none:
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 case ConnectionState.active:

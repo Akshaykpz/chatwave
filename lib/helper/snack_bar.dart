@@ -12,7 +12,7 @@ class SnackBars {
   static void showprogressBar(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => Center(child: const CircularProgressIndicator()),
+      builder: (context) => const Center(child: CircularProgressIndicator()),
     );
   }
 }

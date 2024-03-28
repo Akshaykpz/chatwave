@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatwave/model/chat_user.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 
 class ChatUserCard extends StatefulWidget {
   final ChatUser user;
@@ -32,7 +30,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
             widget.user.about,
             maxLines: 1,
           ),
-          trailing: Text('12 pm'),
+          trailing: const Text('12 pm'),
         ),
       ),
     );
