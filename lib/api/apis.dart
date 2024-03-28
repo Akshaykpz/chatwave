@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:chatwave/model/chat_user.dart';
+import 'package:chatwave/model/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -101,7 +102,35 @@ class Api {
         .update({'image': me.image});
   }
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getallmessages() {
-    return firebasestore.collection('messages').snapshots();
+  static String getConversatioId(String id) => user.uid.hashCode <= id.hashCode
+      ? '${user.uid}_$id'
+      : '${id}_${user.uid}';
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getallmessages(
+      ChatUser user) {
+    return firebasestore
+        .collection('chats/${getConversatioId(user.id)}/messages/')
+        .snapshots();
+  }
+
+  static Future<void> sendMessage(ChatUser chatuser, String msg) async {
+    final time = DateTime.now().millisecondsSinceEpoch.toString();
+    final Message message = Message(
+        toid: chatuser.id,
+        msg: msg,
+        read: '',
+        type: Type.text,
+        send: time,
+        fromid: user.uid);
+    final ref = firebasestore
+        .collection('chats/${getConversatioId(chatuser.id)}/messages/');
+    await ref.doc().set(message.toJson());
+  }
+
+  static Future<void> updateMessageStatus(Message message) async {
+    firebasestore
+        .collection('chats/${getConversatioId(message.fromid)}/messages/')
+        .doc(message.send)
+        .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
   }
 }

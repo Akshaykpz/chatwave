@@ -18,6 +18,8 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
+final TextEditingController textEditingController = TextEditingController();
+
 class _ChatScreenState extends State<ChatScreen> {
   List<Message> _list = [];
   @override
@@ -32,39 +34,30 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: StreamBuilder(
-                stream: Api.getallmessages(),
+                stream: Api.getallmessages(widget.chatUser),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                     case ConnectionState.none:
                       return const Center(
-                        child: CircularProgressIndicator(),
+                        child: SizedBox(),
                       );
                     case ConnectionState.active:
                     case ConnectionState.done:
                       // log("message");
                       // if (snapshot.hasData) {
-                      final data = snapshot.data!.docs;
-                      log('data ${jsonEncode(data[0].data())}');
-                      //   list =
-                      //       data.map((e) => ChatUser.fromjson(e.data())).toList() ??
-                      //           [];
-                      // }
-                      _list.clear();
-                      _list.add(Message(
-                          toid: 'hai',
-                          msg: 'hai',
-                          read: '',
-                          type: Type.text,
-                          send: '12 pm',
-                          fromid: Api.user.uid));
-                      _list.add(Message(
-                          toid: Api.user.uid,
-                          msg: 'hallo',
-                          read: '',
-                          type: Type.text,
-                          send: '12 pm',
-                          fromid: 'xyz'));
+                      if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                        final data = snapshot.data!.docs;
+                        _list = data
+                            .map((e) => Message.fromJson(e.data()))
+                            .toList();
+                        // Rest of your code for handling the list
+                      } else {
+                        return Center(
+                          child: Text('No messages available'),
+                        );
+                      }
+
                       if (_list.isNotEmpty) {
                         return ListView.builder(
                           itemCount: _list.length,
@@ -138,6 +131,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       )),
                   Expanded(
                       child: TextFormField(
+                    controller: textEditingController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     decoration:
@@ -156,7 +150,13 @@ class _ChatScreenState extends State<ChatScreen> {
                         color: Colors.black,
                       )),
                   MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (textEditingController.text.isNotEmpty) {
+                        Api.sendMessage(
+                            widget.chatUser, textEditingController.text);
+                        textEditingController.text = '';
+                      }
+                    },
                     padding: const EdgeInsets.only(left: 3),
                     shape: const CircleBorder(),
                     color: Colors.green,
