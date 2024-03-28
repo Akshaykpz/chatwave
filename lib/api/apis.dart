@@ -100,4 +100,8 @@ class Api {
         .doc(user.uid)
         .update({'image': me.image});
   }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getallmessages() {
+    return firebasestore.collection('messages').snapshots();
+  }
 }
