@@ -96,8 +96,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showSnakbar() {
     showModalBottomSheet(
       context: context,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(20), topLeft: Radius.circular(20))),
       builder: (context) {
         return ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.only(top: 25, bottom: 25),
           children: [
             Text(
               'take profile picture',
@@ -110,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: CircleBorder(),
-                        fixedSize: Size(50, 50)),
+                        fixedSize: Size(100, 100)),
                     onPressed: () {},
                     child: Image.asset(
                         'assets/64d1120804fa6_com.sec.android.gallery3d.png')),
@@ -118,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: CircleBorder(),
-                        fixedSize: Size(50, 50)),
+                        fixedSize: Size(100, 100)),
                     onPressed: () {},
                     child: Image.asset(
                         'assets/80-801558_transparent-gallery-icon-png-flat-camera-icon-png.png'))
