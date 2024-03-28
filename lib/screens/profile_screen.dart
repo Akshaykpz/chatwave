@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatwave/api/apis.dart';
 import 'package:chatwave/model/chat_user.dart';
-import 'package:chatwave/screens/chat_screen.dart';
 
 import 'package:flutter/material.dart';
 
@@ -25,13 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ChatScreen(),
-            ));
-      },
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
