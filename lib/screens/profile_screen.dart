@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatwave/api/apis.dart';
 import 'package:chatwave/model/chat_user.dart';
+import 'package:chatwave/screens/chat_screen.dart';
 
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ChatScreen(),
+            ));
+      },
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -139,13 +146,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () async {
                       final ImagePicker picker = ImagePicker();
 // Pick an image.
-                      final XFile? image =
-                          await picker.pickImage(source: ImageSource.gallery);
+                      final XFile? image = await picker.pickImage(
+                          source: ImageSource.gallery, imageQuality: 90);
                       if (image != null) {
                         log('image :${image.path}, mimtype${image.mimeType},');
                         setState(() {
                           _image = image.path;
                         });
+                        Api.updateProfilePicture(File(_image!));
                         Navigator.pop(context);
                       }
                     },
@@ -159,13 +167,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () async {
                       final ImagePicker picker = ImagePicker();
 // Pick an image.
-                      final XFile? image =
-                          await picker.pickImage(source: ImageSource.camera);
+                      final XFile? image = await picker.pickImage(
+                          source: ImageSource.camera, imageQuality: 80);
                       if (image != null) {
                         log('image :${image.path}, mimtype${image.mimeType},');
                         setState(() {
                           _image = image.path;
                         });
+                        Api.updateProfilePicture(File(_image!));
                         Navigator.pop(context);
                       }
                     },
