@@ -104,15 +104,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               textAlign: TextAlign.center,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: CircleBorder(),
-                        fixedSize: Size(10, 10)),
+                        fixedSize: Size(50, 50)),
                     onPressed: () {},
-                    child: Text("data")),
-                ElevatedButton(onPressed: () {}, child: Text(""))
+                    child: Image.asset(
+                        'assets/64d1120804fa6_com.sec.android.gallery3d.png')),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: CircleBorder(),
+                        fixedSize: Size(50, 50)),
+                    onPressed: () {},
+                    child: Image.asset(
+                        'assets/80-801558_transparent-gallery-icon-png-flat-camera-icon-png.png'))
               ],
             )
           ],

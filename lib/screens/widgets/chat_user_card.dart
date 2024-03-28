@@ -24,7 +24,10 @@ class _ChatUserCardState extends State<ChatUserCard> {
       child: InkWell(
         child: ListTile(
           title: Text(widget.user.name),
-          leading: CachedNetworkImage(imageUrl: widget.user.image),
+          leading: SizedBox(
+              height: 50,
+              width: 50,
+              child: CachedNetworkImage(imageUrl: widget.user.image)),
           subtitle: Text(
             widget.user.about,
             maxLines: 1,
