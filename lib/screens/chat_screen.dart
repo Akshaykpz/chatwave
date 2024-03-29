@@ -1,14 +1,15 @@
-import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatwave/api/apis.dart';
 import 'package:chatwave/model/chat_user.dart';
 import 'package:chatwave/model/message.dart';
 import 'package:chatwave/screens/widgets/message_card.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 class ChatScreen extends StatefulWidget {
   final ChatUser chatUser;
@@ -17,6 +18,8 @@ class ChatScreen extends StatefulWidget {
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
+
+bool _chatimogi = false;
 
 final TextEditingController textEditingController = TextEditingController();
 
@@ -53,7 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             .toList();
                         // Rest of your code for handling the list
                       } else {
-                        return Center(
+                        return const Center(
                           child: Text('No messages available'),
                         );
                       }
@@ -124,7 +127,11 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Row(
                 children: [
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          _chatimogi = _chatimogi;
+                        });
+                      },
                       icon: const Icon(
                         Icons.emoji_emotions,
                         color: Colors.black,
@@ -138,13 +145,18 @@ class _ChatScreenState extends State<ChatScreen> {
                         const InputDecoration(hintText: 'type something'),
                   )),
                   IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.camera,
-                        color: Colors.black,
-                      )),
-                  IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+// Pick an image.
+                        final XFile? image = await picker.pickImage(
+                            source: ImageSource.camera, imageQuality: 80);
+                        if (image != null) {
+                          log('image :${image.path}, mimtype${image.mimeType},');
+
+                          await Api.sendChatImage(
+                              widget.chatUser, File(image.path));
+                        }
+                      },
                       icon: const Icon(
                         Icons.camera_alt_rounded,
                         color: Colors.black,
@@ -152,8 +164,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   MaterialButton(
                     onPressed: () {
                       if (textEditingController.text.isNotEmpty) {
-                        Api.sendMessage(
-                            widget.chatUser, textEditingController.text);
+                        Api.sendMessage(widget.chatUser,
+                            textEditingController.text, Type.text);
                         textEditingController.text = '';
                       }
                     },

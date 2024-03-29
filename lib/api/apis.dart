@@ -113,13 +113,14 @@ class Api {
         .snapshots();
   }
 
-  static Future<void> sendMessage(ChatUser chatuser, String msg) async {
+  static Future<void> sendMessage(
+      ChatUser chatuser, String msg, Type type) async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
     final Message message = Message(
         toid: chatuser.id,
         msg: msg,
         read: '',
-        type: Type.text,
+        type: type,
         send: time,
         fromid: user.uid);
     final ref = firebasestore
@@ -134,12 +135,66 @@ class Api {
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
   }
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessages(
-      ChatUser user) {
-    return firebasestore
-        .collection('chats/${getConversatioId(user.id)}/messages/')
-        .orderBy('sent', descending: true)
-        .limit(1)
-        .snapshots();
+  // static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessages(
+  //     ChatUser user) {
+  //   return firebasestore
+  //       .collection('chats/${getConversatioId(user.id)}/messages/').orderBy('sent',descending: )
+  //       .limit(1)
+  //       .snapshots();
+  // }
+
+  // static Future<void> sendChatImage(ChatUser chatUser, File file) async {
+  //   final ext = file.path.split('.').last;
+  //   log('Extension: $ext');
+
+  //   //storage file ref with path
+  //   final ref = storage.ref().child(
+  //       'images/${getConversatioId(chatUser.id)}${DateTime.now().millisecondsSinceEpoch}.$ext');
+
+  //   //uploading image
+  //   await ref
+  //       .putFile(file, SettableMetadata(contentType: 'image/$ext'))
+  //       .then((p0) {
+  //     log('Data Transferred: ${p0.bytesTransferred / 1000} kb');
+  //   });
+
+  //   //updating image in firestore database
+  //   final imageurl = await ref.getDownloadURL();
+  //   await sendMessage(chatUser, imageurl, Type.image);
+  // }
+  static Future<void> sendChatImage(ChatUser chatUser, File file) async {
+    final ext = file.path.split('.').last;
+    log('Extension: $ext');
+
+    // Storage file reference with path
+    final ref = storage.ref().child(
+        'images/${getConversatioId(chatUser.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext');
+
+    // Uploading image
+    await ref
+        .putFile(file, SettableMetadata(contentType: 'image/$ext'))
+        .then((TaskSnapshot taskSnapshot) async {
+      // Getting download URL of the uploaded image
+      final imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+      // Creating message object
+      final time = DateTime.now().millisecondsSinceEpoch.toString();
+      final Message message = Message(
+          toid: chatUser.id,
+          msg: imageUrl, // Sending image URL instead of the file
+          read: '',
+          type: Type.image,
+          send: time,
+          fromid: user.uid);
+
+      // Saving message to Firestore
+      await firebasestore
+          .collection('chats/${getConversatioId(chatUser.id)}/messages/')
+          .doc()
+          .set(message.toJson());
+    }).catchError((error) {
+      // Handle errors here
+      log('Error uploading image: $error');
+    });
   }
 }
