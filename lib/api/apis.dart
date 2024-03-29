@@ -133,4 +133,13 @@ class Api {
         .doc(message.send)
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
   }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessages(
+      ChatUser user) {
+    return firebasestore
+        .collection('chats/${getConversatioId(user.id)}/messages/')
+        .orderBy('sent', descending: true)
+        .limit(1)
+        .snapshots();
+  }
 }
